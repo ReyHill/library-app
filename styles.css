@@ -14,7 +14,7 @@
   }
   
   .book {
-    height: 150px; 
+    min-height: 150px; 
     width: 200px;
     border: solid orange 5px;
   }
