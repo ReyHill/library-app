@@ -7,6 +7,38 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <form id='library-form' method='post'>
+        <fieldset>
+          <legend>Book Submission</legend>
+        <div class='form-text-input'>
+          <label for='title'>Book Title:</label>
+          <input type='text' id='title' name='book-title' />
+        </div>
+        
+        <div class='form-text-input'>
+          <label for='author'>Book Author:</label>
+          <input type='text' id='author' name='book-author' />
+        </div>
+        
+        <div class='form-text-input'>
+          <label for='pages'>Book Pages:</label>
+          <input type='text' id='pages' name='book-pages' />
+        </div>
+        
+        <div class='form-text-input'>
+          <label for='read'>Book Read:</label>
+          <input type='text' id='read' name='book-read' />
+        </div>
+        </fieldset>
+        <fieldset id='form-options'>
+          <legend>Form Options</legend>
+          <button id='add-entry' type='button'>Add Entry</button>
+          <button id='remove-last-entry' type='button'>Remove Last Entry</button>
+          <button id='reset-btn' type='reset'>Clear Form</button>
+        </fieldset>
+      </form>
+      <div id='library-view'></div>
+      <button id='form-toggle'>New Book</button>
     <script src="index.js"></script>
 </body>
 </html>

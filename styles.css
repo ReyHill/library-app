@@ -1,0 +1,39 @@
+* {
+    margin-bottom: 10px;
+  }
+  
+  #library-view {
+    height: 100%; 
+    width: 50%;
+    border: solid 1px;
+    padding: 10px;
+   
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+  }
+  
+  .book {
+    height: 150px; 
+    width: 200px;
+    border: solid orange 5px;
+  }
+  
+  form {
+    display: none;
+    width: 50%;
+    margin-bottom: 10px;
+    border: 1px solid;
+    padding: 10px;
+  }
+  
+  #form-options {
+    display: flex;
+    justify-content: space-evenly;
+  }
+  
+  .form-text-input {
+    display: grid;
+    padding: 5px;
+    text-align: center;
+  }
