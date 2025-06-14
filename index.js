@@ -12,11 +12,18 @@ const pagesInput = document.getElementById("pages");
 const readInput = document.getElementById("read");
 
 addEntry.addEventListener("click", () => {
+  const readValue = readInput.value.trim().toLowerCase(); 
+  
+  if(readValue !== 'yes' && readValue !== 'no') {
+    alert('Invalid "Read" field input. Indicate "Yes" or "No".');
+    return;
+  }
+
   addBookToLibrary(
     titleInput.value,
     authorInput.value,
     pagesInput.value,
-    readInput.value
+    readValue.charAt(0).toUpperCase() + readValue.slice(1),
   );
   looper(myLibrary);
 });
@@ -43,7 +50,7 @@ function Book(title, author, pages, read) {
     (this.pages = pages),
     (this.read = read),
     (this.info = function () {
-      return `${this.title} by ${this.author}, ${this.pages} pages, ${this.read}.`;
+      return `${this.title} by ${this.author}, ${this.pages} pages, Read: ${this.read}.`;
     });
 }
 
@@ -51,8 +58,6 @@ function addBookToLibrary(title, author, pages, read) {
   let newBook = new Book(title, author, pages, read);
   myLibrary.push(newBook);
 }
-
-// consider presenting the book info as bullet points in a card
 
 function looper(myLibrary) {
   for (let i = 0; i < myLibrary.length; i++) {
@@ -65,7 +70,7 @@ function looper(myLibrary) {
       item.className = "book";
       const newId = self.crypto.randomUUID();
       item.id = newId;
-      book.id = newId; // assign the newly generated id to the array element
+      book.id = newId;
       libraryView.appendChild(item);
       
       const bookInfo = document.createElement('ul'); 
@@ -99,10 +104,15 @@ function looper(myLibrary) {
       }); 
       item.appendChild(itemRemove);
       
-      const itemReadToggle = document.createElement('button'); // if the textContent of the read status is not a boolean value, handle. add this as a book func
+      const itemReadToggle = document.createElement('button');
       itemReadToggle.textContent = 'Read?'; 
       itemReadToggle.addEventListener('click', () => {
-        console.log('hey');
+        if (book.read == 'Yes') {
+          book.read = 'No';
+        } else if (book.read == 'No') {
+          book.read = 'Yes'; 
+        }
+        bookRead.textContent = `Read: ${book.read}`;
       });
       item.appendChild(itemReadToggle); 
     }
