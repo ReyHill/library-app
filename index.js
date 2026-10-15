@@ -12,20 +12,7 @@ const pagesInput = document.getElementById("pages");
 const readInput = document.getElementById("read");
 
 addEntry.addEventListener("click", () => {
-  const readValue = readInput.value.trim().toLowerCase(); 
-  
-  if(readValue !== 'yes' && readValue !== 'no') {
-    alert('Invalid "Read" field input. Indicate "Yes" or "No".');
-    return;
-  }
-
-  addBookToLibrary(
-    titleInput.value,
-    authorInput.value,
-    pagesInput.value,
-    readValue.charAt(0).toUpperCase() + readValue.slice(1),
-  );
-  looper(myLibrary);
+  validation.validateAll();
 });
 
 removeLastEntry.addEventListener("click", (e) => {
@@ -45,16 +32,16 @@ formToggle.addEventListener("click", () => {
 });
 
 class Book {
-  constructor (title, author, pages, read) {
+  constructor(title, author, pages, read) {
     this.title = title;
-    this.author = author; 
+    this.author = author;
     this.pages = pages;
     this.read = read;
-  };
-  get info () {
+  }
+  get info() {
     return `${this.title} by ${this.author} is ${this.pages} long. Read: ${this.read}`;
   }
-};
+}
 
 function addBookToLibrary(title, author, pages, read) {
   let newBook = new Book(title, author, pages, read);
@@ -67,59 +54,157 @@ function looper(myLibrary) {
     if (book.id) {
       continue;
     } else {
-      
       const item = document.createElement("div");
       item.className = "book";
       const newId = self.crypto.randomUUID();
       item.id = newId;
       book.id = newId;
       libraryView.appendChild(item);
-      
-      const bookInfo = document.createElement('ul'); 
-      const bookTitle = document.createElement('li');
-      const bookAuthor = document.createElement('li');
-      const bookPages = document.createElement('li');
-      const bookRead = document.createElement('li');
-      
-      bookTitle.textContent = `Title: ${book.title}`;
-      bookAuthor.textContent = `Author: ${book.author}`; 
-      bookPages.textContent = `Pages: ${book.pages}`; 
-      bookRead.textContent = `Read: ${book.read}`; 
-      
-      bookInfo.appendChild(bookTitle); 
-      bookInfo.appendChild(bookAuthor);
-      bookInfo.appendChild(bookPages); 
-      bookInfo.appendChild(bookRead); 
-      
-      item.appendChild(bookInfo); 
 
-      const itemRemove = document.createElement("button"); 
+      const bookInfo = document.createElement("ul");
+      const bookTitle = document.createElement("li");
+      const bookAuthor = document.createElement("li");
+      const bookPages = document.createElement("li");
+      const bookRead = document.createElement("li");
+
+      bookTitle.textContent = `Title: ${book.title}`;
+      bookAuthor.textContent = `Author: ${book.author}`;
+      bookPages.textContent = `Pages: ${book.pages}`;
+      bookRead.textContent = `Read: ${book.read}`;
+
+      bookInfo.appendChild(bookTitle);
+      bookInfo.appendChild(bookAuthor);
+      bookInfo.appendChild(bookPages);
+      bookInfo.appendChild(bookRead);
+
+      item.appendChild(bookInfo);
+
+      const itemRemove = document.createElement("button");
       itemRemove.textContent = "Remove";
-      itemRemove.id = newId; 
+      itemRemove.id = newId;
       itemRemove.addEventListener("click", (e) => {
         e.target.parentElement.remove();
         const clicked = e.target.id;
-        const indexToRemove = myLibrary.findIndex(elem => elem.id === clicked);
+        const indexToRemove = myLibrary.findIndex(
+          (elem) => elem.id === clicked
+        );
         if (indexToRemove !== -1) {
           myLibrary.splice(indexToRemove, 1);
         }
-      }); 
+      });
       item.appendChild(itemRemove);
-      
-      const itemReadToggle = document.createElement('button');
-      itemReadToggle.textContent = 'Read?'; 
-      itemReadToggle.addEventListener('click', () => {
-        if (book.read == 'Yes') {
-          book.read = 'No';
-        } else if (book.read == 'No') {
-          book.read = 'Yes'; 
+
+      const itemReadToggle = document.createElement("button");
+      itemReadToggle.textContent = "Read?";
+      itemReadToggle.addEventListener("click", () => {
+        if (book.read == "Yes") {
+          book.read = "No";
+        } else if (book.read == "No") {
+          book.read = "Yes";
         }
         bookRead.textContent = `Read: ${book.read}`;
       });
-      item.appendChild(itemReadToggle); 
+      item.appendChild(itemReadToggle);
     }
   }
 }
+
+// Blur Listeners
+
+titleInput.addEventListener("blur", () => {
+  validation.titleValue();
+});
+
+authorInput.addEventListener("blur", () => {
+  validation.authorValue(); 
+}); 
+
+pagesInput.addEventListener("blur", () => {
+  validation.pagesValue(); 
+});
+
+readInput.addEventListener('blur', () => {
+  validation.readValue(); 
+});
+
+// Field Validation Object
+
+const validation = {
+  get titleValue() {
+    if (titleInput.value) {
+      titleInput.classList.remove("invalid");
+      titleInput.classList.add("valid");
+      return true;
+    } else {
+      titleInput.classList.remove("valid");
+      titleInput.classList.add("invalid");
+      return false;
+    }
+  },
+  get authorValue() {
+    if (authorInput.value) {
+      authorInput.classList.remove('invalid'); 
+      authorInput.classList.add('valid'); 
+      return true;
+    } else {
+      authorInput.classList.remove('valid'); 
+      authorInput.classList.add('invalid'); 
+      return false;
+    }
+  },
+  get pagesValue() {
+    if (pagesInput.value) {
+      pagesInput.classList.remove('invalid'); 
+      pagesInput.classList.add('valid'); 
+      return true;
+    } else {
+      pagesInput.classList.remove('valid'); 
+      pagesInput.classList.add('invalid');
+      return false;
+    }
+  },
+  get readValue() {
+    if (readInput.value) {
+      readInput.classList.remove('invalid'); 
+      readInput.classList.add('valid');
+      return true;
+    } else {
+      readInput.classList.remove('valid');
+      readInput.classList.remove('invalid');
+      return false;
+    }
+  },
+  validateAll() {
+    if (
+      titleInput.value &&
+      authorInput.value &&
+      pagesInput.value &&
+      readInput.value
+    ) {
+      const readValue = readInput.value.trim().toLowerCase();
+
+      if (readValue !== "yes" && readValue !== "no") {
+        alert('Invalid "Read" field input. Indicate "Yes" or "No".');
+        return;
+      }
+
+      addBookToLibrary(
+        titleInput.value,
+        authorInput.value,
+        pagesInput.value,
+        readValue.charAt(0).toUpperCase() + readValue.slice(1)
+      );
+      looper(myLibrary);
+    } else if (
+      titleInput.value === "" ||
+      authorInput.value === "" ||
+      pagesInput.value === "" ||
+      readInput.value === ""
+    ) {
+      alert("Empty Input, fill field and try again.");
+    }
+  },
+};
 
 // addBookToLibrary("Book A", "Author One", 100, "Read");
 // addBookToLibrary("Book B", "Author Two", 200, "Read");
